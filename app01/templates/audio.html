@@ -1,0 +1,153 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" style="margin-bottom: 100px;">
+        <div class="container ">
+            <div class="row justify-content-evenly">
+                <div class="col-sm-5">
+                    <div class="card" style="width: 35rem; height: 420px">
+                        <div class="card-body">
+                            <video src="{% static '/images/807427488-1-208.mp4' %}" style="width: 33rem; height: 355px"
+                                   controls
+                                   id="covervideo">
+                            </video>
+                        </div>
+                    </div>
+                    <label for="formFile" class="form-label">请选择一段视频</label>
+                    <form method="post" id="imgform" enctype="multipart/form-data" action="/audio/">
+                        <div class="input-group">
+                            <input type="file" class="form-control" id="videoInput"
+                                   aria-describedby="inputGroupFileAddon" aria-label="Upload"
+                                   onchange="selectVideo(this);">
+                            <button class="btn btn-outline-info" type="button" onclick="gosubmit()" id="imgbtn">上传
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-5">
+                    <div class="card" style="width: 35rem; height: 420px">
+                        <div class="card-body">
+                            <table class="table table-success">
+                                <thead>
+                                <tr>
+                                    <th scope="col">名称</th>
+                                    <th scope="col">返回参数</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>文件名称:</td>
+                                    <td colspan="2" id="rname">~</td>
+                                </tr>
+                                <tr>
+                                    <td>时长:</td>
+                                    <td colspan="2" id="rtime">~</td>
+                                </tr>
+                                <tr>
+                                    <td>类型:</td>
+                                    <td colspan="2" id="rtype">~</td>
+                                </tr>
+                                <tr>
+                                    <td>tips:</td>
+                                    <td colspan="2" id="rtip" style="width: 60%">~</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <h5 class="card-title">result:</h5>
+                            <div class="embed-responsive embed-responsive-4by3">
+                                <audio controls class="embed-responsive-item">
+
+                                    <source id="raudio" src="">
+                                </audio>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <label for="formFile" class="form-label">基本信息</label>
+
+                    <div class="input-group">
+                        <button class="btn btn-outline-info " type="button" onclick="FlushVideo();">提取
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        var covervideo = '';
+
+        function selectVideo(file) {
+            if (!file.files || !file.files[0]) {
+                alert("未选择任何文件")
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                document.getElementById('covervideo').src = evt.target.result;
+                covervideo = evt.target.result;
+            }
+            reader.readAsDataURL(file.files[0]);
+        }
+    </script>
+    <script type="text/javascript">
+        function gosubmit() { //上传视频
+            var formdata = new FormData();
+            console.log($('#videoInput'))
+            formdata.append('video', $('#videoInput').get(0).files[0]);
+            $.ajax({
+                url: '/audio/',
+                type: 'post',
+                contentType: false,
+                data: formdata,
+                processData: false,
+                success: function (info) {
+                    if (info.status) {
+                        alert("上传成功");
+                    } else {
+                        alert("上传失败");
+                    }
+                    console.log(info)
+                },
+                error: function (err) {
+                    console.log(err)
+                }
+            });
+        }
+    </script>
+    <script>
+        function FlushVideo() {
+            $.ajax({
+                url: "/audio/detect/",
+                type: 'GET',
+                dataType: '',
+                success: function (data) {
+                    console.log(data);
+                    $('#rname').text(data.name)
+                    $('#rtime').text(data.rate)
+                    $('#rtype').text(data.kind)
+                    $('#rtip').text(data.tips)
+                    // 找到audio标签下的source元素，并设置新的src值
+                    $('#raudio').attr('src', data.audio);
+
+                    // 由于更改了source元素的src属性，可能需要重新加载audio元素以使更改生效
+                    $('audio.embed-responsive-item').each(function () {
+                        this.load();
+                    });
+                },
+            })
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <title>模态提取</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}"/>
+</head>
+<body class="">
+<div id="container" style="border: 1px solid black">
+    {% block content %}
+    {% endblock %}
+</div>
+<!-- Scripts -->
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
+<script src="{% static 'js/jquery.scrollex.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+</body>
+</html>

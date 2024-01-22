@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="container-fluid text-center" style="margin-top: 30px">
+        <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+        <div class="row">
+            <div class="card" style="">
+                <img src="{% static '/images/pic001.png' %}" class="card-img-top" alt="" style="height: 380px;">
+                <div class="card-body">
+                    <p class="card-text">视频音频模态提取分析</p>
+                </div>
+            </div>
+        </div>
+        <!-- Columns are always 50% wide, on mobile and desktop -->
+        <div class="row">
+            <h3>视频上传</h3>
+            <div class="col-6">.col-6</div>
+            <div class="col-6">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="file" class="form-control"
+                               aria-label="Upload"
+                               name="video">
+                        <button class="btn btn-outline-secondary" type="submit">上传</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+            <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+            <div class="col-6 col-md-4">.col-6 .col-md-4</div>
+        </div>
+
+        <!-- Columns are always 50% wide, on mobile and desktop -->
+        <div class="row">
+            <div class="col-6">.col-6</div>
+            <div class="col-6">.col-6</div>
+        </div>
+
+    </div>
+
+{% endblock %}
